@@ -13,12 +13,53 @@ struct node
   struct node *prev;
 };
 
-void insertAtBeginning(int data)
+void insertAtBeginning(struct Node *head, int data)
 {
+  // create a new node
+  struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+  newNode->data = data; // insert data into new node
+  newNode->next = head; // have new node point to head
+  newNode->prev = NULL; // new node prev point to null
+
+  // make the new node to be head
+  if (head != NULL)
+  {
+    head->prev = newNode;
+  }
+
+  return newNode; // return the new node
 }
 
-void insertAtEnd(int data)
+void insertAtEnd(struct Node *head, int data)
 {
+  // create a new node
+  struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+  newNode->data = data; // insert data into new node
+  newNode->next = head; // have new node point to head
+
+  // if head is NULL then list is empty
+  if (head != NULL)
+  {
+    newNode->prev = newNode;
+    return newNode;
+  }
+  else
+  {
+
+    // traverse the list until the one before last.
+    struct Node *current = head;
+    while (current->next != NULL)
+    {
+      current = current->next;
+    }
+
+    // have the current-next point to the new node
+    // and the prev node to point to the last node in the list
+    current->next = newNode;
+    newNode->prev = current;
+
+    return head
+  }
 }
 
 void insertAfter(int data, int previous)
@@ -38,22 +79,40 @@ void displayMenu()
   printf("0. Exit program\n");
 }
 
+void displayLinkedList(struct node *head)
+{
+  struct Node *current = head;
+
+  // Traverse the linked list and print the values
+  while (current != NULL)
+  {
+    printf("%d -> ", current->data);
+    current = current->next;
+  }
+
+  printf("NULL\n");
+}
+
 int main()
 {
 
-  int ans; // to store the answer of the user
-  FILE *file = fopen("nodeData.txt", "r");
+  int ans;                                 // to store the answer of the user
+  FILE *file = fopen("nodeData.txt", "r"); // open the file
 
+  // Check if file is opened
   if (file == NULL)
   {
     perror("Error opening the file");
     return 1;
   }
 
-  int valueRead;
+  int valueRead; // read the value
+
   while (fscanf(file, "%d", &valueRead) == 1)
   {
-    }
+  }
+
+  fclose(file);
 
   // while ()
   // do {
