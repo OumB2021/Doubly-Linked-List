@@ -60,6 +60,7 @@ struct node *insertAtEnd(struct node *head, int data)
   return head;
 }
 
+// Insert a node after a given node.
 struct node *insertAfter(struct node *head, int data, int previous)
 {
   // create a new node
@@ -81,8 +82,10 @@ struct node *insertAfter(struct node *head, int data, int previous)
     current = current->next;
   }
 
+  // Handle cases where the previous value wasn't found
   if (current == NULL)
   {
+    system("cls"); // clear the console output
     printf("Value %d not found in the list. Node not inserted.\n", previous);
     free(newNode); // Free the new node as it won't be inserted
     return head;
@@ -103,13 +106,14 @@ struct node *insertAfter(struct node *head, int data, int previous)
 void displayMenu()
 {
   printf("---------------------------------------------\n");
-  printf("\t\t\t\t DOUBLY LINKED LIST MENU\n");
+  printf("\tDOUBLY LINKED LIST MENU\n");
   printf("---------------------------------------------\n");
   printf("What operation would you like to perform?\n");
   printf("Please select from the list below:\n");
   printf("1. Insert a new node\n");
   printf("2. Insert a new node after a given node\n");
   printf("3. Delete a node\n");
+  printf("4. Print the list\n");
   printf("0. Exit program\n");
 }
 
@@ -117,7 +121,6 @@ void displayLinkedList(struct node *head)
 {
   struct node *current = head;
   struct node *tail = NULL;
-
   // Traverse the linked list and print the values
   while (current != NULL)
   {
@@ -157,9 +160,9 @@ int main()
     scanf("%d", &ans);
 
     // Input validation
-    while (ans < 0 || ans > 3)
+    while (ans < 0 || ans > 4)
     {
-      printf("Please make a valid choice from 0 to 3: ");
+      printf("Please make a valid choice from 0 to 4: ");
       scanf("%d", &ans);
     }
 
@@ -180,10 +183,13 @@ int main()
       head = insertAfter(head, userData, prevData);
       break;
 
-    default:
+    case 4:
+      system("cls");
       displayLinkedList(head);
+      break;
     }
   } while (ans != 0);
 
+  printf("You have now existed the program.\nGoodbye!\n");
   return 0;
 }
