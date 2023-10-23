@@ -13,10 +13,10 @@ struct node
   struct node *prev;
 };
 
-void insertAtBeginning(struct Node *head, int data)
+struct node *insertAtBeginning(struct node *head, int data)
 {
   // create a new node
-  struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+  struct node *newNode = (struct node *)malloc(sizeof(struct node));
   newNode->data = data; // insert data into new node
   newNode->next = head; // have new node point to head
   newNode->prev = NULL; // new node prev point to null
@@ -30,10 +30,10 @@ void insertAtBeginning(struct Node *head, int data)
   return newNode; // return the new node
 }
 
-void insertAtEnd(struct Node *head, int data)
+struct node *insertAtEnd(struct node *head, int data)
 {
   // create a new node
-  struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+  struct node *newNode = (struct node *)malloc(sizeof(struct node));
   newNode->data = data; // insert data into new node
   newNode->next = head; // have new node point to head
 
@@ -47,7 +47,7 @@ void insertAtEnd(struct Node *head, int data)
   {
 
     // traverse the list until the one before last.
-    struct Node *current = head;
+    struct node *current = head;
     while (current->next != NULL)
     {
       current = current->next;
@@ -58,12 +58,52 @@ void insertAtEnd(struct Node *head, int data)
     current->next = newNode;
     newNode->prev = current;
 
-    return head
+    return head;
   }
 }
 
-void insertAfter(int data, int previous)
+struct node *insertAfter(struct node *head, int data, int previous)
 {
+  // create a new node
+  struct node *newNode = (struct node *)malloc(sizeof(struct node));
+  newNode->data = data; // insert data into new node
+
+  // if head is NULL then list is empty
+  if (head != NULL)
+  {
+    newNode->next = NULL;
+    newNode->prev = NULL;
+    printf("value %d does not exist in list, " % d " was inserted as the first value in list", previous, data);
+    return newNode;
+  }
+  else
+  {
+
+    // traverse the list until the one before last.
+    struct node *current = head;
+    while (current != NULL && current->data != previous)
+    {
+      current = current->next;
+    }
+
+    if (current == NULL)
+    {
+      printf("Value %d not found in the list. Node not inserted.\n", previous);
+      free(newNode); // Free the new node as it won't be inserted
+      return head;
+    }
+
+    // Insert the new node after 'current'
+    newNode->next = current->next;
+    newNode->prev = current;
+    if (current->next != NULL)
+    {
+      current->next->prev = newNode;
+    }
+    current->next = newNode;
+
+    return head;
+  }
 }
 
 void displayMenu()
@@ -81,15 +121,16 @@ void displayMenu()
 
 void displayLinkedList(struct node *head)
 {
-  struct Node *current = head;
+  struct node *current = head;
+  struct node *tail = NULL;
 
   // Traverse the linked list and print the values
   while (current != NULL)
   {
     printf("%d -> ", current->data);
     current = current->next;
+    tail = current
   }
-
   printf("NULL\n");
 }
 
