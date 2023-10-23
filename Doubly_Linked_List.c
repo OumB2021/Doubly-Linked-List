@@ -42,7 +42,7 @@ struct node *insertAtEnd(struct node *head, int data)
   // if head is NULL then list is empty
   if (head == NULL)
   {
-    newNode->prev = newNode;
+    newNode->prev = NULL;
     return newNode;
   }
   // traverse the list until the one before last.
@@ -103,6 +103,7 @@ struct node *insertAfter(struct node *head, int data, int previous)
   return head;
 }
 
+// delete a node.
 struct node *deleteNode(struct node *head, int data)
 {
   if (head == NULL)
@@ -127,7 +128,7 @@ struct node *deleteNode(struct node *head, int data)
   {
     head = current->next;
     if (head != NULL)
-      head->prev = NULL
+      head->prev = NULL;
   }
   else
   {
@@ -143,7 +144,7 @@ struct node *deleteNode(struct node *head, int data)
 // Display menu for user
 void displayMenu()
 {
-  printf("---------------------------------------------\n");
+  printf("\n---------------------------------------------\n");
   printf("\tDOUBLY LINKED LIST MENU\n");
   printf("---------------------------------------------\n");
   printf("What operation would you like to perform?\n");
@@ -155,17 +156,22 @@ void displayMenu()
   printf("0. Exit program\n");
 }
 
-// dDisplay linked list
+// Display linked list
 void displayLinkedList(struct node *head)
 {
   struct node *current = head;
-  struct node *tail = NULL;
   // Traverse the linked list and print the values
+  while (current->next != NULL)
+  {
+    printf("%d -> ", current->data);
+    current = current->next;
+  }
+  printf("%d -> NULL\n", current->data);
+
   while (current != NULL)
   {
     printf("%d -> ", current->data);
-    tail = current;
-    current = current->next;
+    current = current->prev;
   }
   printf("NULL\n");
 }
@@ -209,17 +215,29 @@ int main()
     switch (ans)
     {
     case 1:
+      system("cls");
       printf("Please insert your node data: ");
       scanf("%d", &userData);
       head = insertAtEnd(head, userData);
+      displayLinkedList(head);
       break;
 
     case 2:
+      system("cls");
       printf("Please insert your node data: ");
       scanf("%d", &userData);
       printf("Now insert your previous data: ");
       scanf("%d", &prevData);
       head = insertAfter(head, userData, prevData);
+      displayLinkedList(head);
+      break;
+
+    case 3:
+      system("cls");
+      printf("Please insert your data you'd like to delete: ");
+      scanf("%d", &userData);
+      head = deleteNode(head, userData);
+      displayLinkedList(head);
       break;
 
     case 4:
@@ -229,6 +247,8 @@ int main()
     }
   } while (ans != 0);
 
+  system("cls");
+  displayLinkedList(head);
   printf("You have now existed the program.\nGoodbye!\n");
   return 0;
 }
