@@ -103,6 +103,44 @@ struct node *insertAfter(struct node *head, int data, int previous)
   return head;
 }
 
+struct node *deleteNode(struct node *head, int data)
+{
+  if (head == NULL)
+  {
+    printf("The list is empty, no nodes to be deleted.\n");
+    return head;
+  }
+
+  struct node *current = head;
+
+  while (current != NULL && current->data != data)
+    current = current->next;
+
+  if (current == NULL)
+  {
+    printf("Node does not exist in the list.\n");
+    return head;
+  }
+
+  // in case the node to be deleted is the first one.
+  if (current == head)
+  {
+    head = current->next;
+    if (head != NULL)
+      head->prev = NULL
+  }
+  else
+  {
+    current->prev->next = current->next;
+    if (current->next != NULL)
+      current->next->prev = current->prev;
+  }
+
+  free(current);
+  return head;
+}
+
+// Display menu for user
 void displayMenu()
 {
   printf("---------------------------------------------\n");
@@ -117,6 +155,7 @@ void displayMenu()
   printf("0. Exit program\n");
 }
 
+// dDisplay linked list
 void displayLinkedList(struct node *head)
 {
   struct node *current = head;
