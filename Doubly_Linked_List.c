@@ -150,17 +150,40 @@ int main()
   fclose(file);
 
   // while ()
-  // do {
-  //   displayMenu();
-  //   printf("Enter your choice: ");
-  //   scanf("%d", &ans);
+  do
+  {
+    displayMenu();
+    printf("Enter your choice: ");
+    scanf("%d", &ans);
 
-  //   // Input validation
-  //   if (ans < 0 || ans > 3) {
-  //     printf("Please make a valid choice from 0 to 3.\n");
-  //   }
+    // Input validation
+    while (ans < 0 || ans > 3)
+    {
+      printf("Please make a valid choice from 0 to 3: ");
+      scanf("%d", &ans);
+    }
 
-  // } while (ans != 0);
+    int userData, prevData;
+    switch (ans)
+    {
+    case 1:
+      printf("Please insert your node data: ");
+      scanf("%d", &userData);
+      head = insertAtEnd(head, userData);
+      break;
+
+    case 2:
+      printf("Please insert your node data: ");
+      scanf("%d", &userData);
+      printf("Now insert your previous data: ");
+      scanf("%d", &prevData);
+      head = insertAfter(head, userData, prevData);
+      break;
+
+    default:
+      displayLinkedList(head);
+    }
+  } while (ans != 0);
 
   return 0;
 }
