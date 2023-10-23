@@ -13,6 +13,7 @@ struct node
   struct node *prev;
 };
 
+// insert a new node at the beginning of the linked list
 struct node *insertAtBeginning(struct node *head, int data)
 {
   // create a new node
@@ -30,36 +31,33 @@ struct node *insertAtBeginning(struct node *head, int data)
   return newNode; // return the new node
 }
 
+// insert a new node at the head of the linked list
 struct node *insertAtEnd(struct node *head, int data)
 {
   // create a new node
   struct node *newNode = (struct node *)malloc(sizeof(struct node));
   newNode->data = data; // insert data into new node
-  newNode->next = head; // have new node point to head
+  newNode->next = NULL; // have new node point to head
 
   // if head is NULL then list is empty
-  if (head != NULL)
+  if (head == NULL)
   {
     newNode->prev = newNode;
     return newNode;
   }
-  else
+  // traverse the list until the one before last.
+  struct node *current = head;
+  while (current->next != NULL)
   {
-
-    // traverse the list until the one before last.
-    struct node *current = head;
-    while (current->next != NULL)
-    {
-      current = current->next;
-    }
-
-    // have the current-next point to the new node
-    // and the prev node to point to the last node in the list
-    current->next = newNode;
-    newNode->prev = current;
-
-    return head;
+    current = current->next;
   }
+
+  // have the current-next point to the new node
+  // and the prev node to point to the last node in the list
+  current->next = newNode;
+  newNode->prev = current;
+
+  return head;
 }
 
 struct node *insertAfter(struct node *head, int data, int previous)
@@ -69,41 +67,37 @@ struct node *insertAfter(struct node *head, int data, int previous)
   newNode->data = data; // insert data into new node
 
   // if head is NULL then list is empty
-  if (head != NULL)
+  if (head == NULL)
   {
     newNode->next = NULL;
     newNode->prev = NULL;
-    printf("value %d does not exist in list, " % d " was inserted as the first value in list", previous, data);
+    printf("value %d does not exist in list, %d  was inserted as the first value in list", previous, data);
     return newNode;
   }
-  else
+  // traverse the list until the one before last.
+  struct node *current = head;
+  while (current != NULL && current->data != previous)
   {
+    current = current->next;
+  }
 
-    // traverse the list until the one before last.
-    struct node *current = head;
-    while (current != NULL && current->data != previous)
-    {
-      current = current->next;
-    }
-
-    if (current == NULL)
-    {
-      printf("Value %d not found in the list. Node not inserted.\n", previous);
-      free(newNode); // Free the new node as it won't be inserted
-      return head;
-    }
-
-    // Insert the new node after 'current'
-    newNode->next = current->next;
-    newNode->prev = current;
-    if (current->next != NULL)
-    {
-      current->next->prev = newNode;
-    }
-    current->next = newNode;
-
+  if (current == NULL)
+  {
+    printf("Value %d not found in the list. Node not inserted.\n", previous);
+    free(newNode); // Free the new node as it won't be inserted
     return head;
   }
+
+  // Insert the new node after 'current'
+  newNode->next = current->next;
+  newNode->prev = current;
+  if (current->next != NULL)
+  {
+    current->next->prev = newNode;
+  }
+  current->next = newNode;
+
+  return head;
 }
 
 void displayMenu()
@@ -128,8 +122,8 @@ void displayLinkedList(struct node *head)
   while (current != NULL)
   {
     printf("%d -> ", current->data);
+    tail = current;
     current = current->next;
-    tail = current
   }
   printf("NULL\n");
 }
@@ -139,6 +133,8 @@ int main()
 
   int ans;                                 // to store the answer of the user
   FILE *file = fopen("nodeData.txt", "r"); // open the file
+  int valueRead;                           // read the value
+  struct node *head = NULL;                // Create an empty doubly linked list
 
   // Check if file is opened
   if (file == NULL)
@@ -147,12 +143,10 @@ int main()
     return 1;
   }
 
-  int valueRead; // read the value
-
   while (fscanf(file, "%d", &valueRead) == 1)
-  {
-  }
+    head = insertAtEnd(head, valueRead);
 
+  displayLinkedList(head);
   fclose(file);
 
   // while ()
